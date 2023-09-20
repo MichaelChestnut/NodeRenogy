@@ -109,9 +109,9 @@ module.exports = {
 
 
             // Create a CSV header with the keys from the object
-            const header = Object.keys(newData).join(',');
+            const header = Object.keys(dataWithTimestamp).join(',');
             // Create a CSV row with the values from the object
-            const values = Object.values(newData).join(',');
+            const values = Object.values(dataWithTimestamp).join(',');
 
             // Define filename
             let fileName = dataDir + hostName + '-' + subTopic + '-' + year + month + date + '.csv';

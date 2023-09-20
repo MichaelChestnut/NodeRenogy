@@ -7,7 +7,7 @@ module.exports = {
         try {
             // define vars
             let jsonData = [];
-            let dataDir = '/Data/';
+            let dataDir = '/home/supervisor/data/noderenogy/';
             let hostName = os.hostname();
 
             let date_time = new Date();
@@ -74,13 +74,6 @@ module.exports = {
     
     writeToCSV: async function(data, subTopic) {
         try {
-            // Exclude the 'setData' key from the data object
-            const { setData, ...newData } = data;
-            // Create a CSV header with the keys from the object
-            const header = Object.keys(newData).join(',');
-            // Create a CSV row with the values from the object
-            const values = Object.values(newData).map(value => `"${value}"`).join(',');
-
             // Define vars
             let dataDir = '/home/supervisor/Data/NodeRenogy/';
             let hostName = os.hostname();
@@ -99,11 +92,26 @@ module.exports = {
             // get current seconds
             let seconds = ("0" + date_time.getSeconds()).slice(-2);
 
-            // Format data into a CSV string
-            let csvRow = [
-                year + "-" + month + "-" + date,
-                hours + ":" + minutes + ":" + seconds
-            ].join(',');
+            // Exclude the 'setData' key from the data object
+            const { setData, ...newData } = data;
+
+            const isoTimestamp = date_time.toISOString();
+
+            // The key-value pair to add at the beginning of the newData object
+            let newKey = 'TimeStamp';
+            let newValue = isoTimestamp;
+
+            // Create a new object with the desired order
+            let dataWithTimestamp = {
+              [newKey]: newValue,
+              ...newData, // Spread the existing object
+            };
+
+
+            // Create a CSV header with the keys from the object
+            const header = Object.keys(newData).join(',');
+            // Create a CSV row with the values from the object
+            const values = Object.values(newData).join(',');
 
             // Define filename
             let fileName = dataDir + hostName + '-' + subTopic + '-' + year + month + date + '.csv';
@@ -137,3 +145,5 @@ module.exports = {
 
 
 }
+
+
